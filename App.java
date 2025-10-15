@@ -456,11 +456,11 @@ public class App extends Thread {
                 // Enviar mensaje de INICIO
                 Mensaje inicio = new Mensaje(TipoMensaje.INICIO, "Cliente-" + idCliente);
                 buzonEntrada.depositar(inicio);
-                System.out.println("✅ Cliente " + idCliente + " INICIADO - esperando a otros clientes...");
+                System.out.println("Cliente " + idCliente + " INICIADO - esperando a otros clientes...");
 
                 // CAMBIO 2h: Esperar a que TODOS los clientes envíen INICIO
                 barrier.await();
-                System.out.println("🚀 Cliente " + idCliente + " comenzando a generar mensajes (todos sincronizados)");
+                System.out.println("Cliente " + idCliente + " comenzando a generar mensajes (todos sincronizados)");
 
                 // Generar mensajes
                 for (int i = 0; i < numMensajes; i++) {
@@ -474,7 +474,7 @@ public class App extends Thread {
                 // Enviar mensaje de FIN
                 Mensaje fin = new Mensaje(TipoMensaje.FIN, "Cliente-" + idCliente);
                 buzonEntrada.depositar(fin);
-                System.out.println("🏁 Cliente " + idCliente + " FINALIZADO");
+                System.out.println("Cliente " + idCliente + " FINALIZADO");
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -501,31 +501,31 @@ public class App extends Thread {
                     Mensaje m = buzonEntrega.extraer();
 
                     if (m == null) {
-                        System.out.println("🏁 [SERVIDOR-" + idServidor + "] Finalizado (buzón vacío y fin enviado)");
+                        System.out.println("[SERVIDOR-" + idServidor + "] Finalizado (buzón vacío y fin enviado)");
                         break;
                     }
 
                     // CAMBIO 2f: Detectar INICIO
                     if (m.getTipo() == TipoMensaje.INICIO) {
                         iniciado = true;
-                        System.out.println("🟢 [SERVIDOR-" + idServidor + "] INICIADO (recibido mensaje INICIO)");
+                        System.out.println("[SERVIDOR-" + idServidor + "] INICIADO (recibido mensaje INICIO)");
                         continue;
                     }
 
                     // Detectar FIN
                     if (m.getTipo() == TipoMensaje.FIN) {
-                        System.out.println("🏁 [SERVIDOR-" + idServidor + "] Recibido FIN - Finalizando");
+                        System.out.println("[SERVIDOR-" + idServidor + "] Recibido FIN - Finalizando");
                         break;
                     }
 
                     // Procesar mensaje (decisión: procesamos aunque no haya INICIO aún)
                     if (!iniciado) {
-                        System.out.println("⚠️ [SERVIDOR-" + idServidor + "] Procesando mensaje antes de INICIO: " + m.getId());
+                        System.out.println("[SERVIDOR-" + idServidor + "] Procesando mensaje antes de INICIO: " + m.getId());
                     }
 
                     int tiempoProceso = 50 + (int)(Math.random() * 100);
                     Thread.sleep(tiempoProceso);
-                    System.out.println("📧 [SERVIDOR-" + idServidor + "] Procesado: " + m.getId() + " (tiempo: " + tiempoProceso + "ms)");
+                    System.out.println("[SERVIDOR-" + idServidor + "] Procesado: " + m.getId() + " (tiempo: " + tiempoProceso + "ms)");
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
